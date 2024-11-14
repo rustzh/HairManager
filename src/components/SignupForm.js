@@ -1,83 +1,73 @@
-// src/components/SignupForm.js
 import React, { useState } from 'react';
+import axios from 'axios';
 import './SignupForm.css';
 
 function SignupForm() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-  });
+    const [Email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+        if (password !== confirmPassword) {
+            setError("비밀번호가 일치하지 않습니다.");
+            return;
+        }
 
-    try {
-      const response = await fetch('https://your-api-endpoint/signup', {  // 실제 서버의 API 주소로 변경
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+        try {
+            const response = await axios.post('http://localhost:5000/api/signup', {
+                email: Email,
+                username,
+                password,
+            });
+            alert(response.data.message);
+        } catch (error) {
+            console.error(error);
+            setError("회원가입에 실패했습니다.");
+        }
+    };
 
-      if (!response.ok) {
-        throw new Error('회원가입에 실패했습니다.');
-      }
-
-      const data = await response.json();
-      console.log('서버 응답:', data);
-      alert('회원가입이 완료되었습니다!');
-
-    } catch (error) {
-      console.error('Error:', error);
-      alert('회원가입 중 오류가 발생했습니다.');
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="signup-form">
-      <h2>회원가입</h2>
-      <label>
-        사용자명:
-        <input
-          type="text"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label>
-        이메일:
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <label>
-        비밀번호:
-        <input
-          type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-      </label>
-      <button type="submit">회원가입</button>
-    </form>
-  );
+    return (
+        <div className="signup-form-container">
+            <h2>회원가입</h2>
+            <form onSubmit={handleSubmit} className="signup-form">
+                <input
+                    type="text"
+                    value={Email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="이메일"
+                    className="signup-input"
+                />
+                <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="아이디"
+                    className="signup-input"
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="비밀번호"
+                    className="signup-input"
+                />
+                <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="비밀번호 확인"
+                    className="signup-input"
+                />
+                {error && <div className="error-message">{error}</div>} {/* 오류 메시지 출력 */}
+                <button type="submit" className="signup-button">회원가입</button>
+            </form>
+        </div>
+    );
 }
 
 export default SignupForm;
