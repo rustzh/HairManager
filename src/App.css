@@ -1,0 +1,117 @@
+/* Reset some basic styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* App 전체 레이아웃 */
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* 헤더 스타일 */
+.App-header {
+  background-color: #282c34;
+  padding: 20px;
+  color: white;
+}
+
+.App-logo {
+  height: 80px;
+  pointer-events: none;
+}
+
+/* 업로드 지시 텍스트 스타일 */
+.upload-instruction {
+  color: #61dafb;
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+
+/* 업로드 버튼 */
+button {
+  background-color: #61dafb;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #21a1f1;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+  background-color: #333;
+  padding: 10px;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar ul li {
+  margin: 0 15px;
+}
+
+.navbar ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar ul li a:hover {
+  color: #61dafb;
+}
+
+/* 푸터 스타일 */
+.App-footer {
+  background-color: #282c34;
+  color: white;
+  padding: 10px;
+  font-size: 0.9em;
+}
+
+.App-footer a {
+  color: #61dafb;
+  text-decoration: none;
+  margin: 0 5px;
+}
+
+.App-footer a:hover {
+  color: #21a1f1;
+}
+
+/* 홈 페이지 스타일 */
+.Home {
+  padding: 20px;
+}
+
+.Home h2 {
+  font-size: 2em;
+  color: #333;
+}
+
+/* 미디어 쿼리: 반응형 디자인 */
+@media (max-width: 768px) {
+  .App-header, .App-footer {
+      padding: 15px;
+      font-size: 0.9em;
+  }
+
+  .navbar ul {
+      flex-direction: column;
+  }
+
+  .navbar ul li {
+      margin: 10px 0;
+  }
+}
