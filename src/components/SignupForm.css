@@ -2,6 +2,7 @@
 .signup-form-container {
     max-width: 400px;
     margin: 50px auto;
+    margin-top: 20px;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
