@@ -26,9 +26,13 @@ function About() {
 function App() {
   const [file, setFile] = useState(null);
   const [gender, setGender] = useState('');
+  const [bubbleMessage, setBubbleMessage] = useState(
+    '안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!'
+  );
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
+    setBubbleMessage('안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!'); // 초기 메시지로 재설정
   };
 
   const handleFileChange = (e) => {
@@ -37,6 +41,10 @@ function App() {
   };
 
   const handleButtonClick = () => {
+    if (!gender) {
+      setBubbleMessage('성별을 선택해주세요!');
+      return;
+    }
     document.getElementById('file-upload').click();
   };
 
@@ -49,8 +57,12 @@ function App() {
           <div className="logo-container">
             <img src={logo} className="App-logo" alt="logo" />
             <div className="speech-bubble">
-            안녕하세요! 저는 AI입니다.<br />
-            헤어스타일을 추천해드릴게요!
+              {bubbleMessage.split('\n').map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
             </div>
           </div>
           <p>AI 기반 얼굴형 분석 및 헤어스타일 추천</p>
@@ -85,12 +97,10 @@ function App() {
             id="file-upload"
             style={{ display: 'none' }}
             onChange={handleFileChange}
-            disabled={!gender}
           />
           <button
             type="button"
             onClick={handleButtonClick}
-            disabled={!gender}
           >
             사진 업로드
           </button>
