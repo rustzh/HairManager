@@ -8,7 +8,7 @@ app.use(express.json());
 
 // MySQL 연결 설정
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "localhost"
   user: "root", // MySQL 사용자 이름
   password: "", // MySQL 비밀번호
   database: "hairmanager", // 연결할 데이터베이스 이름
