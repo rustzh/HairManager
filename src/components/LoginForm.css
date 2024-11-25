@@ -1,8 +1,7 @@
-/* 로그인 폼 전체 스타일 */
+
 .login-form-container {
     max-width: 400px;
-    margin: 50px auto;
-    margin-top: 20px;
+    margin: 10px auto;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -10,14 +9,13 @@
     text-align: center;
 }
 
-/* 헤더 스타일 */
 h2 {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* 로그인 입력창 스타일 */
+
 .login-input {
     width: 100%;
     padding: 12px;
@@ -28,13 +26,13 @@ h2 {
     box-sizing: border-box;
 }
 
-/* 포커스 상태 스타일 */
+
 .login-input:focus {
     border-color: #0073e6;
     outline: none;
 }
 
-/* 로그인 버튼 스타일 */
+
 .login-button {
     width: 100%;
     padding: 12px;
@@ -51,7 +49,7 @@ h2 {
     background-color: #005bb5;
 }
 
-/* 오류 메시지 스타일 */
+
 .error-message {
     color: red;
     font-size: 14px;

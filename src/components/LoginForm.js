@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './LoginForm.css'; // 스타일 시트 임포트
+import './LoginForm.css';
 
 function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(''); // 오류 메시지 상태 추가
-
+    const [error, setError] = useState('');
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // 오류 메시지 초기화
+        setError('');
 
         try {
             const response = await axios.post('http://localhost:5000/api/login', {
@@ -19,7 +18,7 @@ function LoginForm() {
             alert(response.data.message);
         } catch (error) {
             console.error(error);
-            setError("로그인에 실패했습니다."); // 실패 시 오류 메시지 표시
+            setError("로그인에 실패했습니다.");
         }
     };
 

@@ -20,7 +20,7 @@ function SignupForm() {
 
         try {
             const response = await axios.post('http://localhost:5000/api/signup', {
-                email: Email,  // 이메일 필드 추가
+                email: Email,
                 username,
                 password,
             });
