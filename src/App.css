@@ -48,18 +48,6 @@ body, .App {
   margin-top: 15px;
 }
 
-<<<<<<< HEAD
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-=======
->>>>>>> origin/yun
 .App-footer {
   background-color: #0c1546;
   padding: 20px 20px 20px 20px;
@@ -121,8 +109,6 @@ button:hover {
   text-align: center;
   margin-top: 10px;
 }
-<<<<<<< HEAD
-=======
 
 /* 성별 선택 스타일 */
 .gender-selection {
@@ -187,4 +173,3 @@ button:hover {
   border-style: solid;
   border-color: #f0f0f0 transparent transparent transparent;
 }
->>>>>>> origin/yun
