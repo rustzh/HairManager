@@ -3,7 +3,7 @@ import axios from 'axios';
 import './SignupForm.css';
 
 function SignupForm() {
-    const [Email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -19,8 +19,8 @@ function SignupForm() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/signup', {
-                email: Email,
+            const response = await axios.post('http://localhost:5000/signup', {
+                email,
                 username,
                 password,
             });
@@ -37,7 +37,7 @@ function SignupForm() {
             <form onSubmit={handleSubmit} className="signup-form">
                 <input
                     type="text"
-                    value={Email}
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="이메일"
                     className="signup-input"

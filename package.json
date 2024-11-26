@@ -12,6 +12,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "mongoose": "^8.8.0",
+    "mysql": "^2.18.1",
     "mysql2": "^3.11.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -43,6 +44,11 @@
       "last 1 safari version"
     ]
   },
+  "description": "<<<<<<< HEAD\r # HairManager\r This is a website that recommend hairstyles\r =======\r # Getting Started with Create React App",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }

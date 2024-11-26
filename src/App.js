@@ -23,6 +23,7 @@ function About() {
   );
 }
 
+
 function App() {
   const [file, setFile] = useState(null);
   const [gender, setGender] = useState('');
