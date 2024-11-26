@@ -33,7 +33,7 @@ function App() {
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
-    setBubbleMessage('안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!'); // 초기 메시지로 재설정
+    setBubbleMessage('사진을 업로드 해주세요!'); // 초기 메시지로 재설정
   };
 
   const handleFileChange = (e) => {
@@ -43,7 +43,7 @@ function App() {
 
   const handleButtonClick = () => {
     if (!gender) {
-      setBubbleMessage('성별을 선택해주세요!');
+      setBubbleMessage('먼저 성별을 선택해주세요!');
       return;
     }
     document.getElementById('file-upload').click();
