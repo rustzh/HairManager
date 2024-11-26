@@ -44,7 +44,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "<<<<<<< HEAD\r # HairManager\r This is a website that recommend hairstyles\r =======\r # Getting Started with Create React App",
+  "description": "\r # HairManager\r This is a website that recommend hairstyles\r",
   "main": "index.js",
   "keywords": [],
   "author": "",
