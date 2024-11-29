@@ -2,6 +2,8 @@ node_modules/
 .pnp
 .pnp.js
 
+backend/.env
+
 # Testing
 coverage/
 
@@ -11,7 +13,7 @@ build/
 # Misc
 .DS_Store
 .env
-=======
+
 # testing
 coverage/
 
