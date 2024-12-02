@@ -32,7 +32,7 @@ const db = mysql.createConnection({
 
 // 회원가입 API 엔드포인트
 app.post('/signup', async (req, res) => { // async 키워드를 사용하여 await를 사용할 수 있게 함
-    const { email, username, password } = req.body;
+    const { email, name, password } = req.body;
 
     // 비밀번호 암호화
     try {
@@ -41,7 +41,7 @@ app.post('/signup', async (req, res) => { // async 키워드를 사용하여 awa
 
         // 데이터베이스에 저장
         const query = 'INSERT INTO users (email, username, password) VALUES (?, ?, ?)';
-        db.query(query, [email, username, hashedPassword], (err, result) => {
+        db.query(query, [email, name, hashedPassword], (err, result) => {
             if (err) {
                 console.error('데이터 저장 실패:', err);
                 return res.status(500).send('데이터베이스 오류');

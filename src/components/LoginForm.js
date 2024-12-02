@@ -13,7 +13,7 @@ function LoginForm() {
 
         try {
             // 서버로 로그인 요청
-            const response = await axios.post('http://localhost:5000/api/login', {
+            const response = await axios.post('http://localhost:5000/login', {
                 email, // 이메일로 전송
                 password,
             });
