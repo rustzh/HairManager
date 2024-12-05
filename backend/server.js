@@ -111,6 +111,45 @@ app.post('/login', async (req, res) => {
     });
 });
 
+// Access Token 갱신 API
+app.post('/refresh-token', (req, res) => {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+        return res.status(400).json({ message: 'Refresh Token이 필요합니다.'});
+    }
+
+    // Refresh Token이 유효한지 확인
+    jwt.verify(refreshToken, process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.status(403).json({ message: 'Refresh Token이 유효하지 않습니다.'});
+        }
+
+        const queryVerifyRefreshToken = 'SELECT * FROM refresh_tokens WHERE refresh_token = ?';
+        db.query(queryVerifyRefreshToken, [refreshToken], (err, result) => {
+            if (err) {
+                console.error('Refresh Token 유효성 확인 실패:', err);
+                return res.status(500).send('서버 오류');
+            }
+
+            if (result.length === 0) {
+                return res.status(404).send('토큰이 유효하지 않습니다.');
+            }
+            // Refresh Token이 유효하면 새로운 Access Token 발급
+            const accessToken = jwt.sign(
+                { userId: decoded.userId },
+                process.env.SECRET_KEY,
+                { expiresIn: '1h' }
+            );
+
+            res.status(200).json({
+                message: '새로운 Access Token 발급',
+                accessToken: accessToken,
+            });
+        });
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`서버가 http://localhost:${PORT} 에서 실행 중입니다.`);
 });
