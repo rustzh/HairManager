@@ -1,29 +1,41 @@
-
 .navbar {
-    background-color: #333;
-    padding: 20px 0;
-    text-align: center;
-  }
-  
-  .navbar ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .navbar li {
-    display: inline;
-    margin: 0 15px;
-  }
-  
-  .navbar a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-  
-  .navbar a:hover {
-    text-decoration: underline;
-  }
-  
+  background-color: #333;
+  padding: 20px 0;
+}
+
+.navbar ul {
+  display: flex; /* Flexbox로 정렬 */
+  align-items: center; /* 세로 가운데 정렬 */
+  justify-content: center; /* 가운데 정렬 */
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: relative; /* 오른쪽 그룹 위치를 위한 기준 */
+}
+
+.navbar li {
+  margin: 0 15px;
+}
+
+.navbar .right-links {
+  position: absolute; /* 오른쪽 끝으로 이동 */
+  right: 0;
+  display: flex; /* Flexbox로 정렬 */
+  align-items: center;
+}
+
+.navbar h2 {
+  margin: 0 15px;
+  font-size: 1em;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
