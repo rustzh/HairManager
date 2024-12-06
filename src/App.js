@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
@@ -40,7 +40,7 @@ function App() {
 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
-    setBubbleMessage('사진을 업로드 해주세요!');
+    setBubbleMessage('정면 사진을 업로드 해주세요!');
   };
 
   const handleFileChange = (e) => {
@@ -115,7 +115,7 @@ function App() {
                     </label>
                   </div>
 
-                  <p className="upload-instruction">(성별 선택 후 사진을 업로드해주세요)</p>
+                  <p className="upload-instruction">(성별 선택 후 정면이 나온 사진을 업로드해주세요)</p>
 
                   <input
                     type="file"
@@ -148,11 +148,6 @@ function App() {
                     </>
                   )}
                 </header>
-
-                <footer className="App-footer">
-                  <Link to="/signup" className="button">회원가입</Link>
-                  <Link to="/login" className="button">로그인</Link>
-                </footer>
               </div>
             }
           />

@@ -48,15 +48,6 @@ body, .App {
   margin-top: 15px;
 }
 
-.App-footer {
-  background-color: #0c1546;
-  padding: 20px 20px 20px 20px;
-  text-align: center;
-  width: 97.3%;
-  color: #ffffff;
-  margin-top: -80px;
-}
-
 .upload-instruction {
   margin: 0;
   font-size: 0.8em;
