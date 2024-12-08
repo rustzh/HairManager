@@ -55,7 +55,8 @@ router.post('/', async (req, res) => {
             res.status(200).json({
                 message: '로그인 성공',
                 accessToken: accessToken,
-                refreshToken: refreshToken
+                refreshToken: refreshToken,
+                username: user.username, // username 추가
             });
         });
     });
