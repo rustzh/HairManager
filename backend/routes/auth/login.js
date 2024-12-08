@@ -1,11 +1,11 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const db = require('../../config/db')
 
 // 로그인 API 엔드포인트
-app.post('/login', async (req, res) => {
+router.post('/', async (req, res) => {
     const { email, password } = req.body;
 
     // 데이터베이스에서 사용자 이메일 조회
@@ -62,7 +62,7 @@ app.post('/login', async (req, res) => {
 })
 
 // Access Token 갱신 API
-app.post('/refresh-token', (req, res) => {
+router.post('/refresh-token', (req, res) => {
     const { refreshToken } = req.body;
 
     if (!refreshToken) {
@@ -99,3 +99,5 @@ app.post('/refresh-token', (req, res) => {
         });
     });
 });
+
+module.exports = router;

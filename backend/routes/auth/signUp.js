@@ -1,10 +1,10 @@
 const express = require('express');
-const app = express();
+const router = express.Router();
 const bcrypt = require('bcryptjs');
-
+const db = require('../../config/db')
 
 // 회원가입 API 엔드포인트
-app.post('/signup', async (req, res) => { // async 키워드를 사용하여 await를 사용할 수 있게 함
+router.post('/', async (req, res) => { // async 키워드를 사용하여 await를 사용할 수 있게 함
     const { email, name, password } = req.body;
 
     // 비밀번호 암호화
@@ -26,3 +26,5 @@ app.post('/signup', async (req, res) => { // async 키워드를 사용하여 awa
         res.status(500).json({ message: '비밀번호 암호화 실패' });
     }
 });
+
+module.exports = router;
