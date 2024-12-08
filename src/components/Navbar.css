@@ -39,3 +39,19 @@
 .navbar a:hover {
   text-decoration: underline;
 }
+
+.username {
+  color: white;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.logout-button {
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-button:hover {
+  text-decoration: underline;
+}

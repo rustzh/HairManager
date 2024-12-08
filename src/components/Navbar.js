@@ -15,11 +15,18 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
+    // 로그아웃 처리
     localStorage.removeItem('username');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     setIsLoggedIn(false);
     setUsername('');
+
+    // Alert 메시지 표시
+    alert('로그아웃 되었습니다.');
+
+    // 페이지 새로고침
+    window.location.reload();
   };
 
   return (
@@ -32,8 +39,13 @@ function Navbar() {
         <div className="right-links">
           {isLoggedIn ? (
             <>
-              <h2>{username}님</h2>
-              <h2 onClick={handleLogout} style={{ cursor: 'pointer', color: 'blue' }}>
+              <h2 className="username" style={{ color: 'white' }}>{username}님</h2>
+
+              <h2 
+                className="logout-button" 
+                onClick={handleLogout} 
+                style={{ cursor: 'pointer', color: 'white' }}
+              >
                 로그아웃
               </h2>
             </>
