@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-// 각 모듈의 라우트 가져오기
-const loginRoutes = require('./auth/login');
-const signUpRoutes = require('./auth/signUp');
-const uploadRoutes = require('./user/upload');
+const registerRoutes = require('./users/register');
+const loginRoutes = require('./users/login');
+const authRoutes = require('./users/auth');
+const logoutRoutes = require('./users/logout');
 
-// 라우트 등록
-router.use('/login', loginRoutes);
-router.use('/signup', signUpRoutes);
-router.use('/upload', uploadRoutes);
+router.use('/users/register', registerRoutes);
+router.use('/users/login', loginRoutes);
+router.use('/users/auth', authRoutes);
+router.use('/users/logout', logoutRoutes);
 
 module.exports = router;
