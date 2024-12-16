@@ -86,10 +86,10 @@ User.updateRefreshTokenByEmail = async (email, newRefreshToken) => {
 };
 
 // 사용자 refreshtoken 삭제
-User.clearRefreshTokenByID = async (id, newRefreshToken) => {
+User.clearRefreshTokenByID = async (id, newRefreshToken = '') => {
   try {
     const [updatedRows] = await User.update(
-      { refreshtoken: newRefreshToken },
+      { refreshtoken: newRefreshToken }, // 빈 문자열을 넣는 부분
       { where: { id } }
     );
     console.log(updatedRows > 0 ? 'User updated' : 'No user found');

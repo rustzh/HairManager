@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios'; // axios 추가
 import './Navbar.css';
 
 function Navbar() {
@@ -14,19 +15,33 @@ function Navbar() {
     }
   }, []);
 
-  const handleLogout = () => {
-    // 로그아웃 처리
-    localStorage.removeItem('username');
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('refreshToken');
-    setIsLoggedIn(false);
-    setUsername('');
+  const handleLogout = async () => {
+    const accessToken = localStorage.getItem('accessToken');
 
-    // Alert 메시지 표시
-    alert('로그아웃 되었습니다.');
+    try {
+      // 서버에 로그아웃 요청
+      await axios.get('http://localhost:5000/api/users/logout', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`, // Authorization 헤더에 토큰 추가
+        },
+      });
 
-    // 페이지 새로고침
-    window.location.reload();
+      // 로그아웃 성공 시 로컬 스토리지 삭제
+      localStorage.removeItem('username');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      setIsLoggedIn(false);
+      setUsername('');
+
+      // Alert 메시지 표시
+      alert('로그아웃 되었습니다.');
+
+      // 페이지 새로고침
+      window.location.reload();
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      alert('로그아웃에 실패했습니다. 다시 시도해 주세요.');
+    }
   };
 
   return (
