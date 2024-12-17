@@ -5,7 +5,7 @@ const { auth } = require('../../middleware/authMiddleware');
 
 router.get('/', auth, async (req, res) => {
     try {
-      await User.clearRefreshTokenByID(req.user.id, '');
+      await User.updateRefreshTokenByID(req.user.id, '');
       res.clearCookie('user_refreshToken');
       return res.status(200).json({ message: '로그아웃 성공' });
     } catch (err){
