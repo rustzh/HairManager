@@ -30,7 +30,10 @@ def process():
         predictions = predictions * 100 # 확률을 %로 변환
 
         result = {face_type: f"{percentage:.2f}%" for face_type, percentage in zip(face_types, predictions)}
-        return result, 200
+
+        ansi_escape = re.compile(r'\x1B[@-_][0-?]*[ -/]*[@-~]')
+        return ansi_escape.sub('', result), 200
+        # return result, 200
     except Exception as e:
         return {"error": f"Server encountered an error: {str(e)}"}, 500
 
