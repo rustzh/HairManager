@@ -85,8 +85,7 @@ User.updateRefreshTokenByEmail = async (email, newRefreshToken) => {
   }
 };
 
-// 사용자 refreshtoken 삭제
-User.clearRefreshTokenByID = async (id, newRefreshToken) => {
+User.updateRefreshTokenByID = async (id, newRefreshToken) => {
   try {
     const [updatedRows] = await User.update(
       { refreshtoken: newRefreshToken },

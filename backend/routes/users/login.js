@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../../config/db')
 const User = require('../../models/User');
 
 router.post('/', async (req, res) => {
@@ -10,14 +9,14 @@ router.post('/', async (req, res) => {
     const user = await User.getUserByEmail(email);
 
     if (!user) {
-    return res.satatus(404).json({ message: '사용자를 찾을 수 없습니다.' });
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
     }
 
     // 사용자 존재 -> 비밀번호 일치 확인
     const isMatch = await bcrypt.compare(password, user.password);
         
     if (!isMatch) {
-    return res.status(401).json({ message: '비밀번호가 틀렸습니다.' });
+      return res.status(401).json({ message: '비밀번호가 틀렸습니다.' });
     }
         
     // 로그인 성공!
@@ -25,7 +24,7 @@ router.post('/', async (req, res) => {
     const accessToken = jwt.sign(
       { userId: user.id },
       process.env.ACCESS_SECRET_KEY,
-      { expiresIn: '1m' }
+      { expiresIn: '15m' }
     );
     
     // Refresh Token 발급
