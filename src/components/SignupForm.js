@@ -21,7 +21,7 @@ function SignupForm() {
 
         try {
             // 서버로 회원가입 요청 보내기
-            const response = await axios.post('http://localhost:5000/signup', {
+            const response = await axios.post('http://localhost:5000/api/users/register', {
                 email,
                 name, // 이름을 전송
                 password,

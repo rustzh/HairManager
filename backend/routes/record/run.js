@@ -20,12 +20,13 @@ const upload = multer({
 
 router.post('/', upload.single('file'), async (req, res) => {
     try {
-        const result = await runPython([req.file.path]);
+        // 모델 파일에서 얼굴형 코드 받아옴
+        const faceShapeCode = await runPython([req.file.path]);
+        // 얼굴형 코드 + 성별 코드 조합으로 csv 파일에서 결과값 가져옴
 
         fs.unlinkSync(req.file.path);
         res.json({
-            success: true,
-            result: result.trim()
+            faceShape: faceShapeCode.trim()
         });
     } catch (error) {
         res.status(500).json({

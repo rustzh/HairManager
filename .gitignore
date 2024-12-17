@@ -2,7 +2,7 @@ node_modules/
 .pnp
 .pnp.js
 
-backend/.env
+backend/keras_model/first_model.keras
 
 # Testing
 coverage/
