@@ -13,7 +13,7 @@ function LoginForm() {
 
         try {
             // 서버로 로그인 요청
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post('http://localhost:5000/api/users/login', {
                 email,
                 password,
             });
@@ -27,7 +27,7 @@ function LoginForm() {
             window.location.href = '/'; // 로그인 후 홈으로 리디렉션
         } catch (error) {
             console.error(error);
-            setError('로그인에 실패했습니다.');
+            setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
         }
     };
 
