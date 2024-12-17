@@ -28,10 +28,13 @@ def process(image_path):
 
         # 예측
         predictions = model.predict(image_array, verbose=0)[0]  # 첫 번째 배치의 결과
-        predictions = predictions * 100 # 확률을 %로 변환
 
-        result = {face_type: f"{percentage:.2f}%" for face_type, percentage in zip(face_types, predictions)}
-        return result
+        # 딕셔너리 생성: 각 face_type과 그에 해당하는 확률을 매칭
+        result = {face_type: f"{percentage * 100:.2f}%" for face_type, percentage in zip(face_types, predictions)}
+
+        # JSON으로 변환
+        json_result = json.dumps(result)
+        return json_result
     except Exception as e:
         return {"error": f"Server encountered an error: {str(e)}"}
 
