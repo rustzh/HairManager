@@ -4,7 +4,7 @@ import './SignupForm.css';
 
 function SignupForm() {
     const [email, setEmail] = useState('');
-    const [name, setName] = useState(''); // 이름 입력 필드
+    const [username, setUsername] = useState(''); // 이름 입력 필드
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
@@ -23,7 +23,7 @@ function SignupForm() {
             // 서버로 회원가입 요청 보내기
             const response = await axios.post('http://localhost:5000/api/users/register', {
                 email,
-                name, // 이름을 전송
+                username, // 이름을 전송
                 password,
             });
 
@@ -48,8 +48,8 @@ function SignupForm() {
                 />
                 <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     placeholder="이름"
                     className="signup-input"
                     required
