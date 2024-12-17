@@ -29,12 +29,19 @@ def process(image_path):
         # 예측
         predictions = model.predict(image_array, verbose=0)[0]  # 첫 번째 배치의 결과
 
-        # 딕셔너리 생성: 각 face_type과 그에 해당하는 확률을 매칭
-        result = {face_type: f"{percentage * 100:.2f}%" for face_type, percentage in zip(face_types, predictions)}
+        # 내림차순 정렬
+        sorted_indices = np.argsort(predictions)[::-1]
 
-        # JSON으로 변환
-        json_result = json.dumps(result)
-        return json_result
+        f = sorted_indices[0], s = sorted_indices[1]
+
+        face_code = f
+
+        if predictions[f] - predictions[s] < 0.2f:
+            face_code += f * 10
+        else:
+            face_code += s * 10
+
+        return face_code
     except Exception as e:
         return {"error": f"Server encountered an error: {str(e)}"}
 
