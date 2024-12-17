@@ -32,11 +32,12 @@ def process(image_path):
         # 내림차순 정렬
         sorted_indices = np.argsort(predictions)[::-1]
 
-        f = sorted_indices[0], s = sorted_indices[1]
+        f = sorted_indices[0]
+        s = sorted_indices[1]
 
         face_code = f * 10
 
-        if predictions[f] - predictions[s] < 0.2f:
+        if predictions[f] - predictions[s] < 0.2:
             face_code += f
         else:
             face_code += s
