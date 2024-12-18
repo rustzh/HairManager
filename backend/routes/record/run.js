@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
+const imageCache = require('../../utils/imageCache');
 const runPython = require('../../controllers/pythonRunner');
 const { upload } = require('../../middleware/multerMiddleware');
 const { filterCsvRows } = require('../../utils/csvUtils');
-
-// 이미지 삭제 타이머 관리
-const imageCache = new Map();
 
 router.post('/', upload.single('file'), async (req, res) => {
     try {

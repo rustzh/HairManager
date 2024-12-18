@@ -16,8 +16,8 @@ const History = sequelize.define('History', {
         key: 'id'
       }
     },
-    faceShape: {
-      type: DataTypes.STRING(15),
+    typeCode: {
+      type: DataTypes.STRING(3),
       allowNull: false,
     },
     imageUrl: {
@@ -36,12 +36,12 @@ const History = sequelize.define('History', {
 );
 
 // 결과 저장 (Histroy 인스턴스 생성)
-History.createHistory = async (faceShape, imageUrl, userId) => {
+History.createHistory = async (userId,typeCode, imageUrl) => {
     try {
       const history = await History.create({
-        faceShape: faceShape,
+        userId: userId,
+        typeCode: typeCode,
         imageUrl: imageUrl,
-        userId: userId
       });
       console.log('결과가 저장되었습니다. ', history);
     return history;
