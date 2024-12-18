@@ -8,6 +8,14 @@ const History = sequelize.define('History', {
       primaryKey: true,
       allowNull: false,
     },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'users',
+        key: 'id'
+      }
+    },
     faceShape: {
       type: DataTypes.STRING(15),
       allowNull: false,
@@ -15,6 +23,10 @@ const History = sequelize.define('History', {
     imageUrl: {
       type: DataTypes.STRING(255),
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW
     }
     // FOREIGN KEY (userId) REFERENCES Users(id)
   }, {
@@ -24,12 +36,12 @@ const History = sequelize.define('History', {
 );
 
 // 결과 저장 (Histroy 인스턴스 생성)
-History.createHistory = async (faceShape, imageUrl, userID) => {
+History.createHistory = async (faceShape, imageUrl, userId) => {
     try {
       const history = await History.create({
         faceShape: faceShape,
         imageUrl: imageUrl,
-        userID: userID
+        userId: userId
       });
       console.log('결과가 저장되었습니다. ', history);
     return history;
@@ -40,11 +52,11 @@ History.createHistory = async (faceShape, imageUrl, userID) => {
 };
 
 // 결과 조회 (userID로 결과 찾기)
-History.getHistoryByID = async (userID) => {
+History.getHistoryById = async (userId) => {
     try {
       const histories = await History.findAll({
         where: {
-            userId: userID
+          userId: userId
         },
         order: [['createdAt', 'DESC']]
       });

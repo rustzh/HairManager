@@ -4,6 +4,7 @@ node_modules/
 
 backend/.env
 backend/keras_model/first_model.keras
+backend/uploads/temp/
 
 # Testing
 coverage/
