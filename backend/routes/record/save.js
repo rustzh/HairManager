@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../../models/User');
-const History = require('../../models/History');
 const imageCache = require('../../utils/imageCache');
 const { auth } = require('../../middleware/authMiddleware');
 const { imageUploadToS3 } = require('../../services/s3Service');
+const { createHistory } = require('../../controllers/historyController');
 
 // 결과를 저장함 (userId, 검색날짜, 결과얼굴형)
 router.post('/', auth, async (req, res) => {
@@ -26,7 +25,7 @@ router.post('/', auth, async (req, res) => {
         const imageUrl = await imageUploadToS3(userId, filePath, fileName, timer);
 
         // 결과값 - DB (userId, typeCode, imageUrl)
-        await History.createHistory(userId, typeCode, imageUrl);
+        await createHistory(userId, typeCode, imageUrl);
         console.log('DB 저장 완료');
         res.status(200).json({
             message: '저장 완료'

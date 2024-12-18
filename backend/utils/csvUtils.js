@@ -27,7 +27,7 @@ const filterCsvRows = (value) => {
             const { typeCode, typeName, typeDesc, hairName, hairDesc } = filterdRow[0];
 
             resolve({ typeCode, typeName, typeDesc, hairName, hairDesc } );
-        });  
+        });
     });
 };
 
