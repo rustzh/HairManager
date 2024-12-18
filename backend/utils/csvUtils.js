@@ -3,8 +3,8 @@ const path = require('path');
 const Papa = require('papaparse');
 const filePath = path.join(__dirname, '../keras_model/FaceHairData.csv')
 
+// typeCode === value인 행의 정보 추출
 const filterCsvRows = (value) => {
-    
     return new Promise((resolve, reject) => {
         fs.readFile(filePath, 'utf8', (err, data) => {
             if (err) {

@@ -35,7 +35,7 @@ router.post('/', upload.single('file'), async (req, res) => {
         // 성별 코드 + 얼굴형 코드 조합으로 csv 파일에서 결과값 가져오기
         const typeCode = (genderCode + faceShapeCode).trim(); // faceShapeCode에 개행문자가 있어서 trim()
 
-        const row = filterCsvRows(typeCode)
+        filterCsvRows(typeCode)
             .then(row => {
                 // 결과값 반환
                 res.json({
