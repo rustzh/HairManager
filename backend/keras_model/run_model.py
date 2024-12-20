@@ -28,10 +28,21 @@ def process(image_path):
 
         # 예측
         predictions = model.predict(image_array, verbose=0)[0]  # 첫 번째 배치의 결과
-        predictions = predictions * 100 # 확률을 %로 변환
 
-        result = {face_type: f"{percentage:.2f}%" for face_type, percentage in zip(face_types, predictions)}
-        return result
+        # 내림차순 정렬
+        sorted_indices = np.argsort(predictions)[::-1]
+
+        f = sorted_indices[0]
+        s = sorted_indices[1]
+
+        face_code = f * 10
+
+        if predictions[f] - predictions[s] < 0.2:
+            face_code += f
+        else:
+            face_code += s
+
+        return face_code
     except Exception as e:
         return {"error": f"Server encountered an error: {str(e)}"}
 

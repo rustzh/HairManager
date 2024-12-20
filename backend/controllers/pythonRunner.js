@@ -3,7 +3,7 @@ const path = require('path');
 
 function runPython(params) {
     return new Promise((resolve, reject) => {
-        const pythonProcess = spawn('python', [path.join(__dirname, 'test.py'), params]);
+        const pythonProcess = spawn('python', [path.join(__dirname, '../keras_model/run_model.py'), params]);
 
         let output = '';
         pythonProcess.stdout.on('data', (data) => {
