@@ -50,9 +50,7 @@ router.post("/", async (req, res) => {
 
     // Access Token과 함께 username을 응답에 포함시킴
     res.status(200).json({
-      message: "로그인 성공",
       accessToken,
-      username: user.username, // username 추가
     });
   } catch (error) {
     console.error(error);
