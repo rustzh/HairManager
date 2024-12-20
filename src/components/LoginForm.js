@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // React Router 활용
 import './LoginForm.css';
 
-function LoginForm() {
+function LoginForm({ setUsername }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate(); // 리디렉션을 위한 useNavigate
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -19,15 +21,19 @@ function LoginForm() {
             });
 
             // 로그인 성공 시 사용자 이름과 토큰을 localStorage에 저장
-            localStorage.setItem('username', response.data.username);
-            localStorage.setItem('accessToken', response.data.accessToken);
-            localStorage.setItem('refreshToken', response.data.refreshToken);
+            const { username, accessToken, refreshToken } = response.data;
 
-            alert(response.data.message);
-            window.location.href = '/'; // 로그인 후 홈으로 리디렉션
+            localStorage.setItem('username', username);
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+
+            // 리디렉션 후 페이지 새로 고침
+            navigate('/'); // React Router를 이용한 홈 리디렉션
+            window.location.reload(); // 페이지 새로 고침
+
         } catch (error) {
-            console.error(error);
-            setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
+            console.error('로그인 실패:', error.response || error);
+            setError(error.response?.data?.message || '로그인에 실패했습니다. 이메일과 비밀번호를 확인하세요.');
         }
     };
 

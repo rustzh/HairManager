@@ -45,10 +45,11 @@ router.post('/', async (req, res) => {
     // Refresh Token을 DB에 저장
     await User.updateRefreshTokenByEmail(email, refreshToken);
 
-    // Access Token을 클라이언트에 전달
+    // Access Token과 함께 username을 응답에 포함시킴
     res.status(200).json({
       message: '로그인 성공',
       accessToken,
+      username: user.username, // username 추가
     });
   } catch (error) {
     console.error(error);
