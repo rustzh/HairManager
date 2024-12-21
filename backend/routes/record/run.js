@@ -5,7 +5,6 @@ const imageCache = require("../../utils/imageCache");
 const runPython = require("../../controllers/pythonRunner");
 const { getFaceTypeByCode } = require("../../controllers/faceTypeController");
 const { upload } = require("../../middleware/multerMiddleware");
-const { filterCsvRows } = require("../../utils/csvUtils");
 
 router.post("/", upload.single("file"), async (req, res) => {
   try {
@@ -35,7 +34,7 @@ router.post("/", upload.single("file"), async (req, res) => {
 
     try {
       const queryResult = await getFaceTypeByCode(typeCode);
-      res.json({
+      res.status(200).json({
         fileName: fileName,
         typeCode: queryResult[0].dataValues.typeCode,
         typeName: queryResult[0].dataValues.typeName,
