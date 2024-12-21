@@ -76,7 +76,7 @@ function Navbar() {
         {/* 로그인 상태일 때만 회원 서비스 링크를 보여주기 */}
         {isLoggedIn && (
           <li>
-            <Link to="/member-service">회원 서비스</Link>
+            <Link to="/member-service">기록 저장소</Link>
           </li>
         )}
 
