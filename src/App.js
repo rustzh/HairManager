@@ -4,6 +4,7 @@ import "./App.css";
 import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/Navbar";
+import AnalysisResult from "./AnalysisResult"; // 분석 결과 페이지 import
 import { AuthContext } from "./context/AuthContext"; // AuthContext import
 import axios from "axios";
 
@@ -94,7 +95,8 @@ function About() {
 function App() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext); // AuthContext에서 상태 가져오기
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  const [analysisResult, setAnalysisResult] = useState(null); // 분석 결과 데이터
+  // eslint-disable-next-line no-unused-vars
+  const [analysisResult, setAnalysisResult] = useState(null);
   const [preview, setPreview] = useState(null); // 이미지 미리보기 URL
   const [gender, setGender] = useState(""); // 성별 선택
   const [bubbleMessage, setBubbleMessage] = useState(
@@ -130,6 +132,7 @@ function App() {
     document.getElementById("file-upload").click();
   };
 
+  // 이미지 확인 핸들러
   const handleConfirmImage = async () => {
     if (!preview) {
       alert("이미지를 먼저 업로드해주세요.");
@@ -165,17 +168,17 @@ function App() {
   };
 
   useEffect(() => {
-    // 로컬 스토리지에서 토큰 확인하여 로그인 상태 설정
-    const accessToken = localStorage.getItem("accessToken");
+    // 세션 스토리지에서 토큰 확인하여 로그인 상태 설정
+    const accessToken = sessionStorage.getItem("accessToken");
     setIsLoggedIn(!!accessToken); // 토큰이 있으면 로그인 상태로 설정
-  }, [setIsLoggedIn]);
+  }, [setIsLoggedIn]);  
 
   return (
     <Router>
       <div className="App">
-        {/* Navbar에 isLoggedIn 전달 */}
+        {/* Navbar는 항상 렌더링됩니다 */}
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-  
+
         <Routes>
           {/* 메인 화면 */}
           <Route
@@ -195,7 +198,7 @@ function App() {
                     </div>
                   </div>
                   <p>AI 기반 얼굴형 분석 및 헤어스타일 추천</p>
-  
+
                   {/* 성별 선택 */}
                   <div className="gender-selection">
                     <label>
@@ -238,17 +241,6 @@ function App() {
                     <p>이미지 분석 중입니다. 잠시만 기다려주세요...</p>
                   )}
 
-                  {/* 분석 결과 */}
-                  {analysisResult && (
-                    <div className="analysis-result">
-                      <h3>분석 결과</h3>
-                      <p>얼굴형: {analysisResult.typeName}</p>
-                      <p>설명: {analysisResult.typeDesc}</p>
-                      <p>추천 헤어스타일: {analysisResult.hairName}</p>
-                      <p>헤어스타일 설명: {analysisResult.hairDesc}</p>
-                    </div>
-                  )}
-
                   {/* 미리보기 창 */}
                   {preview && (
                     <>
@@ -286,10 +278,16 @@ function App() {
 
           {/* About 페이지 */}
           <Route path="/about" element={<About />} />
+
+          {/* 분석 결과 페이지 */}
+          <Route
+            path="/analysis-result"
+            element={<AnalysisResult />} // 분석 결과 페이지 컴포넌트
+          />
         </Routes>
       </div>
     </Router>
-  );  
+  );
 }
 
 export default App;
