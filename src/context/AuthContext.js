@@ -4,12 +4,12 @@ import axios from 'axios';
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // 초기값을 null로 설정하여 로딩 상태를 나타냄
   const [username, setUsername] = useState('');
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    
+
     if (accessToken) {
       axios
         .get('/api/users/auth', {
@@ -28,11 +28,11 @@ const AuthProvider = ({ children }) => {
     } else {
       setIsLoggedIn(false);
     }
-  }, []); 
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isLoggedIn, username, setIsLoggedIn, setUsername }}>
-      {children}
+      {isLoggedIn !== null ? children : <div>Loading...</div>} {/* 로그인 상태 확인 중일 때 Loading 표시 */}
     </AuthContext.Provider>
   );
 };

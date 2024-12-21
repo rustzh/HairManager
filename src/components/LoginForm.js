@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // React Router 활용
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // AuthContext import
 import "./LoginForm.css";
 
 function LoginForm() {
+  const { setIsLoggedIn, setUsername } = useContext(AuthContext); // Context에서 상태 변경 함수 가져오기
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -20,14 +22,19 @@ function LoginForm() {
         password,
       });
 
-      // 로그인 성공 시 사용자 이름과 토큰을 localStorage에 저장
-      const { accessToken } = response.data;
+      // 로그인 성공 시 사용자 이름과 토큰을 sessionStorage에 저장
+      const { accessToken, username } = response.data;
 
       sessionStorage.setItem("accessToken", accessToken);
 
+      // Context 상태 업데이트
+      setIsLoggedIn(true);
+      setUsername(username); // 사용자 이름 설정
+
       // 리디렉션 후 페이지 새로 고침
-      navigate("/"); // React Router를 이용한 홈 리디렉션
-      // window.location.reload(); // 페이지 새로 고침
+      navigate("/"); // 홈으로 리디렉션
+      window.location.reload(); // 페이지 새로 고침
+      
     } catch (error) {
       console.error("로그인 실패:", error.response || error);
       setError(

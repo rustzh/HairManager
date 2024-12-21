@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import SignupForm from './components/SignupForm';
 import LoginForm from './components/LoginForm';
 import Navbar from './components/Navbar';
+import { AuthContext } from './context/AuthContext'; // AuthContext import
 
 const logo = '/my_logo.png';
 
@@ -32,7 +33,7 @@ function About() {
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext); // AuthContext에서 상태 가져오기
   const [preview, setPreview] = useState(null);
   const [gender, setGender] = useState('');
   const [bubbleMessage, setBubbleMessage] = useState(
@@ -68,12 +69,12 @@ function App() {
     alert('이미지 선택이 완료되었습니다.');
     setPreview(null);
   };
-
+  
   useEffect(() => {
     // 로컬 스토리지에서 토큰 확인하여 로그인 상태 설정
     const accessToken = localStorage.getItem('accessToken');
     setIsLoggedIn(!!accessToken); // 토큰이 있으면 로그인 상태로 설정
-  }, []);
+  }, [setIsLoggedIn]);
 
   return (
     <Router>
@@ -164,7 +165,7 @@ function App() {
           {/* 로그인 페이지 */}
           <Route path="/login" element={<LoginForm setIsLoggedIn={setIsLoggedIn} />} />
           {/* 회원 서비스 페이지 */}
-          <Route path="/member-service" element={isLoggedIn ? <MemberService /> : <LoginForm setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="/member-service" element={<MemberService />} />
           {/* About 페이지 */}
           <Route path="/about" element={<About />} />
         </Routes>

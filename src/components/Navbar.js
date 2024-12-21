@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Navbar.css";
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);  // 초기 상태를 null로 설정
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
@@ -30,8 +30,12 @@ function Navbar() {
     } else {
       setIsLoggedIn(false);
     }
-    // window.location.reload(); // 페이지 새로 고침
-  }, [isLoggedIn]); // isLoggedIn 상태가 변할 때마다 실행
+  }, []);  // 빈 배열을 넣어 컴포넌트가 처음 렌더링될 때만 실행
+
+  // isLoggedIn이 아직 null일 경우 로딩 상태를 표시
+  if (isLoggedIn === null) {
+    return <div className="loading-message">새로고침 중...</div>;  // 새로고침 중 표시
+  }
 
   const handleLogout = async () => {
     const accessToken = sessionStorage.getItem("accessToken");
@@ -44,7 +48,7 @@ function Navbar() {
         },
       });
 
-      // 로컬스토리지에서 토큰 제거
+      // sessionStorage에서 토큰 제거
       sessionStorage.removeItem("accessToken");
 
       // 상태 업데이트
@@ -55,6 +59,7 @@ function Navbar() {
       alert("로그아웃 되었습니다.");
 
       navigate("/"); // 홈 페이지로 이동
+      window.location.reload(); // 페이지 새로 고침
     } catch (error) {
       console.error("로그아웃 실패:", error);
       alert("로그아웃에 실패했습니다. 다시 시도해 주세요.");
