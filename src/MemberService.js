@@ -10,11 +10,14 @@ function MemberService() {
   const fetchUserData = async () => {
     try {
       const response = await fetch("/api/record/history");
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       const newBlocks = data.map((item) => ({
         id: item.id,
-        faceType: item.FaceType?.typeName || "Unknown",
-        date: item.createdAt.split("T")[0] || "Unknown Date",
+        faceType: item.FaceType.typeName || "Unknown",
+        date: item.createdAt.split("T")[0] || "Unknown",
         hairStyle: item.FaceType.hairName || "Unknown",
       }));
       setBlocks(newBlocks);
