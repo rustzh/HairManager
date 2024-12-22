@@ -12,6 +12,7 @@ const logo = "/my_logo.png";
 
 function MemberService() {
   const [blocks, setBlocks] = useState([]);
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 사용
 
   useEffect(() => {
     fetchUserData();
@@ -19,14 +20,25 @@ function MemberService() {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch("/api/record/history");
+      const accessToken = sessionStorage.getItem("accessToken");
+      const response = await fetch("/api/record/history", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       const data = await response.json();
       const newBlocks = data.map((item) => ({
         id: item.id,
-        faceType: item.FaceType.typeName,
-        date: item.createdAt.split("T")[0],
-        hairStyle: item.FaceType.hairName,
-        imageUrl: item.imageUrl, // imageUrl 추가
+        date: item.createdAt?.split("T")[0] || "Unknown",
+        typeCode: item.typeCode,
+        typeName: item.FaceType?.typeName || "Unknown",
+        typeDesc: item.FaceType?.typeDesc || "Unknown",
+        hairName: item.FaceType?.hairName || "Unknown",
+        hairDesc: item.FaceType?.hairDesc || "Unknown",
+        fileName: item.imageUrl,
       }));
       setBlocks(newBlocks);
     } catch (error) {
@@ -34,20 +46,25 @@ function MemberService() {
     }
   };
 
-  // showHistory 함수 정의: 클릭된 기록을 처리하는 예시
   const showHistory = (block) => {
-    alert(
-      `선택된 기록: \n얼굴형: ${block.faceType}\n헤어스타일: ${block.hairStyle}`
-    );
-    // 여기에서 block의 자세한 내용을 표시하는 로직을 추가할 수 있습니다.
+    // 분석 결과 페이지로 이동하며 선택된 block 데이터를 전달
+    navigate("/analysis-result", {
+      state: {
+        typeCode: block.typeCode,
+        typeName: block.typeName,
+        typeDesc: block.typeDesc,
+        hairName: block.hairName,
+        hairDesc: block.hairDesc,
+        fileName: block.imageUrl,
+      },
+    });
   };
 
   return (
     <div className="MemberService">
       <h1>기록 저장소</h1>
       <p>
-        기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수
-        있습니다.
+        기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수 있습니다.
       </p>
       <div className="HistoryContainer">
         {blocks.length > 0 ? (
@@ -57,9 +74,9 @@ function MemberService() {
               className="historyBlock"
               onClick={() => showHistory(block)}
             >
-              <div className="cell">{block.faceType}</div>
+              <div className="cell">{block.typeName}</div>
               <div className="cell">{block.date}</div>
-              <div className="cell">{block.hairStyle}</div>
+              <div className="cell">{block.hairName}</div>
               <img
                 src={block.imageUrl}
                 alt="Hair style"
@@ -68,7 +85,7 @@ function MemberService() {
             </div>
           ))
         ) : (
-          <p>기록이 없습니다.</p>
+          <p>저장된 기록이 없습니다.</p>
         )}
       </div>
     </div>
