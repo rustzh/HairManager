@@ -244,7 +244,11 @@ function App() {
                   style={{ display: "none" }}
                   onChange={handleFileChange}
                 />
-                <button type="button" onClick={handleButtonClick}>
+                <button
+                  className="upload-button"
+                  type="button"
+                  onClick={handleButtonClick}
+                >
                   사진 업로드
                 </button>
 
