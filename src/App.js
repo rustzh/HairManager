@@ -1,14 +1,79 @@
 import React, { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
 import Navbar from "./components/Navbar";
-import MemberService from "./MemberService";
+import AnalysisResult from "./AnalysisResult"; // 분석 결과 페이지 import
 import { AuthContext } from "./context/AuthContext"; // AuthContext import
 import axios from "axios";
 
 const logo = "/my_logo.png";
+
+function MemberService() {
+  const [blocks, setBlocks] = useState([]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("/api/record/history");
+      const data = await response.json();
+      const newBlocks = data.map((item) => ({
+        id: item.id,
+        faceType: item.FaceType.typeName,
+        date: item.createdAt.split("T")[0],
+        hairStyle: item.FaceType.hairName,
+        imageUrl: item.imageUrl, // imageUrl 추가
+      }));
+      setBlocks(newBlocks);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+    }
+  };
+
+  // showHistory 함수 정의: 클릭된 기록을 처리하는 예시
+  const showHistory = (block) => {
+    alert(
+      `선택된 기록: \n얼굴형: ${block.faceType}\n헤어스타일: ${block.hairStyle}`
+    );
+    // 여기에서 block의 자세한 내용을 표시하는 로직을 추가할 수 있습니다.
+  };
+
+  return (
+    <div className="MemberService">
+      <h1>기록 저장소</h1>
+      <p>
+        기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수
+        있습니다.
+      </p>
+      <div className="HistoryContainer">
+        {blocks.length > 0 ? (
+          blocks.map((block) => (
+            <div
+              key={block.id}
+              className="historyBlock"
+              onClick={() => showHistory(block)}
+            >
+              <div className="cell">{block.faceType}</div>
+              <div className="cell">{block.date}</div>
+              <div className="cell">{block.hairStyle}</div>
+              <img
+                src={block.imageUrl}
+                alt="Hair style"
+                style={{ maxWidth: "100%" }}
+              />
+            </div>
+          ))
+        ) : (
+          <p>기록이 없습니다.</p>
+        )}
+      </div>
+    </div>
+  );
+}
 
 function About() {
   return (
@@ -30,12 +95,17 @@ function About() {
 function App() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext); // AuthContext에서 상태 가져오기
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  const [analysisResult, setAnalysisResult] = useState(null); // 분석 결과 데이터
   const [preview, setPreview] = useState(null); // 이미지 미리보기 URL
   const [gender, setGender] = useState(""); // 성별 선택
   const [bubbleMessage, setBubbleMessage] = useState(
     "안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!"
   );
+
+  // eslint-disable-next-line no-unused-vars
+  const [analysisResult, setAnalysisResult] = useState(null); // 분석 결과 상태
+  // eslint-disable-next-line no-unused-vars
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false); // 분석 완료 상태
+  const navigate = useNavigate(); // useNavigate hook 사용
 
   // 성별 변경 핸들러
   const handleGenderChange = (e) => {
@@ -66,7 +136,14 @@ function App() {
     document.getElementById("file-upload").click();
   };
 
-  const handleConfirmImage = async () => {
+  // 미리보기 창 확인 버튼 클릭 시
+  const handleConfirmImage = () => {
+    // 미리보기 창에서 확인을 누르면 이미지 분석 페이지로 이동
+    navigate("/image-analysis", { state: { previewImage: preview } });
+  };
+
+  // 이미지 분석 요청 함수
+  const handleViewResult = async () => {
     if (!preview) {
       alert("이미지를 먼저 업로드해주세요.");
       return;
@@ -74,20 +151,20 @@ function App() {
 
     setIsLoading(true); // 로딩 상태 활성화
 
-    // FormData 생성
     const formData = new FormData();
     formData.append("gender", gender);
-    formData.append("file", document.getElementById("file-upload").files[0]);
+    const fileBlob = await fetch(preview).then((r) => r.blob());
+    formData.append("file", fileBlob, "uploaded-image.jpg");
 
     try {
-      // 서버로 이미지와 성별 전송
       const response = await axios.post("/api/record/run", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
         setAnalysisResult(response.data); // 분석 결과 저장
-        alert("이미지 분석이 완료되었습니다.");
+        setIsAnalysisComplete(true); // 분석 완료 상태 변경
+        navigate("/analysis-result", { state: response.data }); // 분석 결과를 전달
       } else {
         alert("이미지 분석에 실패했습니다.");
       }
@@ -96,135 +173,146 @@ function App() {
       alert("이미지 분석에 실패했습니다.");
     } finally {
       setIsLoading(false); // 로딩 상태 비활성화
-      setPreview(null); // 미리보기 초기화
     }
   };
 
   useEffect(() => {
-    // 로컬 스토리지에서 토큰 확인하여 로그인 상태 설정
-    const accessToken = localStorage.getItem("accessToken");
+    // 세션 스토리지에서 토큰 확인하여 로그인 상태 설정
+    const accessToken = sessionStorage.getItem("accessToken");
     setIsLoggedIn(!!accessToken); // 토큰이 있으면 로그인 상태로 설정
   }, [setIsLoggedIn]);
 
   return (
-    <Router>
-      <div className="App">
-        {/* Navbar에 isLoggedIn 전달 */}
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+    <div className="App">
+      {/* Navbar는 항상 렌더링됩니다 */}
+      <Navbar
+        isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn}
+        setPreview={setPreview}
+      />
 
-        <Routes>
-          {/* 메인 화면 */}
-          <Route
-            path="/"
-            element={
-              <div>
-                <header className="App-header">
-                  <div className="logo-container">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <div className={`speech-bubble ${preview ? "hidden" : ""}`}>
-                      {bubbleMessage.split("\n").map((line, index) => (
-                        <span key={index}>
-                          {line}
-                          <br />
-                        </span>
-                      ))}
-                    </div>
+      <Routes>
+        {/* 메인 화면 */}
+        <Route
+          path="/"
+          element={
+            <div>
+              <header className="App-header">
+                <div className="logo-container">
+                  <img src={logo} className="App-logo" alt="logo" />
+                  <div className={`speech-bubble ${preview ? "hidden" : ""}`}>
+                    {bubbleMessage.split("\n").map((line, index) => (
+                      <span key={index}>
+                        {line}
+                        <br />
+                      </span>
+                    ))}
                   </div>
-                  <p>AI 기반 얼굴형 분석 및 헤어스타일 추천</p>
+                </div>
+                <p>AI 기반 얼굴형 분석 및 헤어스타일 추천</p>
 
-                  {/* 성별 선택 */}
-                  <div className="gender-selection">
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        onChange={handleGenderChange}
+                {/* 성별 선택 */}
+                <div className="gender-selection">
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="male"
+                      onChange={handleGenderChange}
+                    />
+                    남성
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="gender"
+                      value="female"
+                      onChange={handleGenderChange}
+                    />
+                    여성
+                  </label>
+                </div>
+
+                <p className="upload-instruction">
+                  (성별 선택 후 정면이 나온 사진을 업로드해주세요)
+                </p>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="file-upload"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+                <button type="button" onClick={handleButtonClick}>
+                  사진 업로드
+                </button>
+
+                {/* 미리보기 창 */}
+                {preview && (
+                  <>
+                    <div className="preview-overlay"></div>
+                    <div className="preview-container">
+                      <h3>미리보기</h3>
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="preview-image"
                       />
-                      남성
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        onChange={handleGenderChange}
-                      />
-                      여성
-                    </label>
-                  </div>
-
-                  <p className="upload-instruction">
-                    (성별 선택 후 정면이 나온 사진을 업로드해주세요)
-                  </p>
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="file-upload"
-                    style={{ display: "none" }}
-                    onChange={handleFileChange}
-                  />
-                  <button type="button" onClick={handleButtonClick}>
-                    사진 업로드
-                  </button>
-
-                  {/* 로딩 상태 */}
-                  {isLoading && (
-                    <p>이미지 분석 중입니다. 잠시만 기다려주세요...</p>
-                  )}
-
-                  {/* 분석 결과 */}
-                  {analysisResult && (
-                    <div className="analysis-result">
-                      <h3>분석 결과</h3>
-                      <p>얼굴형: {analysisResult.typeName}</p>
-                      <p>설명: {analysisResult.typeDesc}</p>
-                      <p>추천 헤어스타일: {analysisResult.hairName}</p>
-                      <p>헤어스타일 설명: {analysisResult.hairDesc}</p>
-                    </div>
-                  )}
-
-                  {/* 미리보기 창 */}
-                  {preview && (
-                    <>
-                      <div className="preview-overlay"></div>
-                      <div className="preview-container">
-                        <h3>미리보기</h3>
-                        <img
-                          src={preview}
-                          alt="Preview"
-                          className="preview-image"
-                        />
-                        <div className="preview-buttons">
-                          <button onClick={handleChangeImage}>변경</button>
-                          <button onClick={handleConfirmImage}>확인</button>
-                        </div>
+                      <div className="preview-buttons">
+                        <button onClick={handleChangeImage}>변경</button>
+                        <button onClick={handleConfirmImage}>확인</button>
                       </div>
-                    </>
-                  )}
-                </header>
-              </div>
-            }
-          />
+                    </div>
+                  </>
+                )}
+              </header>
+            </div>
+          }
+        />
 
-          {/* 회원가입 페이지 */}
-          <Route path="/signup" element={<SignupForm />} />
+        {/* 이미지 분석 화면 */}
+        <Route
+          path="/image-analysis"
+          element={
+            <div className="analysis-container">
+              <h3>이미지 분석을 시작하려면 "결과 조회" 버튼을 클릭해주세요.</h3>
+              <img
+                src={preview}
+                alt="Uploaded preview"
+                className="uploaded-image"
+              />
+              {isLoading ? (
+                <p>(이미지 분석 중입니다. 잠시만 기다려주세요...)</p>
+              ) : (
+                <button onClick={handleViewResult}>결과 조회</button>
+              )}
+            </div>
+          }
+        />
 
-          {/* 로그인 페이지 */}
-          <Route
-            path="/login"
-            element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
-          />
+        {/* 회원가입 페이지 */}
+        <Route path="/signup" element={<SignupForm />} />
 
-          {/* 기록 저장소 페이지 */}
-          <Route path="/member-service" element={<MemberService />} />
+        {/* 로그인 페이지 */}
+        <Route
+          path="/login"
+          element={<LoginForm setIsLoggedIn={setIsLoggedIn} />}
+        />
 
-          {/* About 페이지 */}
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </div>
-    </Router>
+        {/* 기록 저장소 페이지 */}
+        <Route path="/member-service" element={<MemberService />} />
+
+        {/* About 페이지 */}
+        <Route path="/about" element={<About />} />
+
+        {/* 분석 결과 페이지 */}
+        <Route
+          path="/analysis-result"
+          element={<AnalysisResult setPreview={setPreview} />}
+        />
+      </Routes>
+    </div>
   );
 }
 

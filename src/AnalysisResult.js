@@ -1,111 +1,76 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./AnalysisResult.css";
 
-function AnalysisResult() {
+function AnalysisResult({ setPreview }) {
   const location = useLocation();
   const analysisResult = location.state;
   const navigate = useNavigate();
 
-  const [timeLeft, setTimeLeft] = useState(10 * 60); // 10분을 초로 설정 (10 * 60 = 600초)
-  const [showAlert, setShowAlert] = useState(false); // 메시지 표시 여부
+  const isLoggedIn = sessionStorage.getItem("accessToken");
 
-  // 타이머 시작
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prevTime) => {
-        if (prevTime === 1) {
-          clearInterval(timer); // 타이머 종료
-          return 0;
-        }
-        return prevTime - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer); // 컴포넌트 언마운트 시 타이머 정리
-  }, []);
-
-  // 10분이 됐을 때
-  useEffect(() => {
-    if (timeLeft === 0 && !showAlert) {
-      // 10분이 지난 후에 자동으로 만료 메시지를 띄움
-      alert("이미지 세션이 만료되었습니다.");
-      setShowAlert(true);
-    }
-  }, [timeLeft, showAlert]); // timeLeft가 0이 되면 실행
-  
   // 저장 버튼 클릭 핸들러
   const handleSave = async () => {
-    if (timeLeft > 0) {
-      // 10분이 지나지 않았으면 정상적으로 저장
-      if (!analysisResult) {
-        alert("저장할 데이터가 없습니다.");
-        return;
+    if (!analysisResult) {
+      alert("저장할 데이터가 없습니다.");
+      return;
+    }
+
+    // 저장할 데이터 객체 생성
+    const dataToSave = {
+      fileName: analysisResult.fileName,
+      typeCode: analysisResult.typeCode,
+    };
+
+    try {
+      const accessToken = sessionStorage.getItem("accessToken");
+
+      const response = await axios.post("/api/record/save", dataToSave, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.status === 200) {
+        alert(response.data.message); // save.js에서 받은 저장 성공 메시지 표시
+      } else {
+        alert(response.data.message); // save.js에서 받은 저장 실패 메시지 표시
       }
-  
-      // 저장할 데이터 객체 생성
-      const dataToSave = {
-        fileName: analysisResult.fileName,
-        typeCode: analysisResult.typeCode,
-      };
-  
-      try {
-        const accessToken = sessionStorage.getItem("access_token");
-  
-        const response = await axios.post(
-          "/api/record/save",
-          dataToSave,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-  
-        if (response.status === 200) {
-          alert(response.data.message); // save.js에서 받은 성공 메시지 표시
-        } else {
-          alert("결과 저장에 실패했습니다.");
-        }
-      } catch (error) {
-        console.error("Error saving result:", error);
-        alert("저장 중 오류가 발생했습니다.");
-      }
-    } else {
-      // 10분이 지나면 저장 불가능, 서버에서 받은 메시지 표시
-      try {
-        const response = await axios.post("/api/record/save", {
-        });
-  
-        alert(response.data.message); // save.js에서 받은 실패 메시지 표시
-      } catch (error) {
-        console.error("Error saving result:", error);
-        alert("저장 중 오류가 발생했습니다.");
-      }
+    } catch (error) {
+      console.error("Error saving result:", error);
+      alert("저장 중 오류가 발생했습니다.");
     }
   };
-    
+
+  // 홈으로 버튼 클릭 핸들러
+  const handleHomeClick = () => {
+    setPreview(null); // 미리보기 초기화
+    navigate("/"); // 홈으로 이동
+  };
+
   return (
     <div className="AnalysisResult">
-      <h3>분석 결과</h3>
-      <p>얼굴형: {analysisResult.typeName}</p>
-      <p>설명: {analysisResult.typeDesc}</p>
-      <p>추천 헤어스타일: {analysisResult.hairName}</p>
-      <p>헤어스타일 설명: {analysisResult.hairDesc}</p>
-
+      <h1 className="title">분석 결과</h1>
+      <div className="image-section">
+        <div className="image-box">업로드 이미지</div>
+        <div className="image-box">헤어 이미지</div>
+      </div>
+      <h2 className="subtitle">{analysisResult.hairName}</h2>
+      <div className="recommendation-list">
+        <p>회원님의 얼굴형은 {analysisResult.typeName}</p>
+        <p>{analysisResult.typeDesc}</p>
+        <p>{analysisResult.hairDesc}</p>
+      </div>
       <div style={{ marginTop: "20px" }}>
-        <button
-          style={styles.button}
-          onClick={() => navigate("/")}
-        >
+        <button style={styles.button} onClick={handleHomeClick}>
           홈으로
         </button>
-        <button
-          style={styles.button}
-          onClick={handleSave}
-        >
-          저장
-        </button>
+        {isLoggedIn && (
+          <button style={styles.button} onClick={handleSave}>
+            저장
+          </button>
+        )}
       </div>
     </div>
   );

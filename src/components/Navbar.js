@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Navbar.css";
 
-function Navbar() {
+function Navbar({ setPreview }) {
   const [isLoggedIn, setIsLoggedIn] = useState(null);  // 초기 상태를 null로 설정
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
@@ -66,11 +66,19 @@ function Navbar() {
     }
   };
 
+  const handleHomeClick = () => {
+    setPreview(null); // 미리보기 초기화
+    navigate("/"); // 홈으로 이동
+  };
+
   return (
     <nav className="navbar">
       <ul>
         <li>
-          <Link to="/">홈</Link>
+          {/* Link 컴포넌트를 열고 닫음 */}
+          <Link to="/" onClick={handleHomeClick}>
+            홈
+          </Link>
         </li>
 
         {/* 로그인 상태일 때만 회원 서비스 링크를 보여주기 */}
