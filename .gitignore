@@ -3,6 +3,8 @@ node_modules/
 .pnp.js
 
 backend/.env
+backend/keras_model/first_model.keras
+backend/uploads/temp/
 
 # Testing
 coverage/
