@@ -101,9 +101,11 @@ function App() {
     "안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!"
   );
 
-  const navigate = useNavigate(); // useNavigate hook 사용
   // eslint-disable-next-line no-unused-vars
   const [analysisResult, setAnalysisResult] = useState(null); // 분석 결과 상태
+  // eslint-disable-next-line no-unused-vars
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false); // 분석 완료 상태
+  const navigate = useNavigate(); // useNavigate hook 사용
 
   // 성별 변경 핸들러
   const handleGenderChange = (e) => {
@@ -134,8 +136,14 @@ function App() {
     document.getElementById("file-upload").click();
   };
 
-  // 이미지 확인 핸들러
-  const handleConfirmImage = async () => {
+  // 미리보기 창 확인 버튼 클릭 시
+  const handleConfirmImage = () => {
+    // 미리보기 창에서 확인을 누르면 이미지 분석 페이지로 이동
+    navigate("/image-analysis", { state: { previewImage: preview } });
+  };
+
+  // 이미지 분석 요청 함수
+  const handleViewResult = async () => {
     if (!preview) {
       alert("이미지를 먼저 업로드해주세요.");
       return;
@@ -143,22 +151,20 @@ function App() {
 
     setIsLoading(true); // 로딩 상태 활성화
 
-    // FormData 생성
     const formData = new FormData();
     formData.append("gender", gender);
-    formData.append("file", document.getElementById("file-upload").files[0]);
+    const fileBlob = await fetch(preview).then((r) => r.blob());
+    formData.append("file", fileBlob, "uploaded-image.jpg");
 
     try {
-      // 서버로 이미지와 성별 전송
       const response = await axios.post("/api/record/run", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (response.status === 200) {
         setAnalysisResult(response.data); // 분석 결과 저장
-        // 분석 결과를 state로 전달하며 페이지 이동
-        navigate("/analysis-result", { state: response.data });
-        alert("이미지 분석이 완료되었습니다.");
+        setIsAnalysisComplete(true); // 분석 완료 상태 변경
+        navigate("/analysis-result"); // 분석 결과 페이지로 이동
       } else {
         alert("이미지 분석에 실패했습니다.");
       }
@@ -167,7 +173,6 @@ function App() {
       alert("이미지 분석에 실패했습니다.");
     } finally {
       setIsLoading(false); // 로딩 상태 비활성화
-      setPreview(null); // 미리보기 초기화
     }
   };
 
@@ -180,8 +185,8 @@ function App() {
   return (
       <div className="App">
         {/* Navbar는 항상 렌더링됩니다 */}
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-
+        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setPreview={setPreview} />
+        
         <Routes>
           {/* 메인 화면 */}
           <Route
@@ -239,11 +244,6 @@ function App() {
                     사진 업로드
                   </button>
 
-                  {/* 로딩 상태 */}
-                  {isLoading && (
-                    <p>이미지 분석 중입니다. 잠시만 기다려주세요...</p>
-                  )}
-
                   {/* 미리보기 창 */}
                   {preview && (
                     <>
@@ -267,6 +267,32 @@ function App() {
             }
           />
 
+          {/* 이미지 분석 화면 */}
+          <Route
+            path="/image-analysis"
+            element={
+              <div className="analysis-container">
+                <h3>이미지 분석을 시작하려면 "결과 조회" 버튼을 클릭해주세요.</h3>
+                <img
+                  src={preview}
+                  alt="Uploaded preview"
+                  className="uploaded-image"
+                />
+                {isLoading ? (
+                  <p>(이미지 분석 중입니다. 잠시만 기다려주세요...)</p>
+                ) : (
+                  <button onClick={handleViewResult}>결과 조회</button>
+                )}
+              </div>
+            }
+          />
+
+          {/* 분석 결과 페이지 */}
+          <Route
+            path="/analysis-result"
+            element={<AnalysisResult analysisResult={analysisResult} />}
+          />
+
           {/* 회원가입 페이지 */}
           <Route path="/signup" element={<SignupForm />} />
 
@@ -283,7 +309,7 @@ function App() {
           <Route path="/about" element={<About />} />
 
           {/* 분석 결과 페이지 */}
-          <Route path="/analysis-result" element={<AnalysisResult analysisResult={analysisResult} />} />
+          <Route path="/analysis-result" element={<AnalysisResult setPreview={setPreview} />} />
         </Routes>
       </div>
   );

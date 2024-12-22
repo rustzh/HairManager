@@ -324,3 +324,40 @@ button:hover {
   grid-row: 2 / 3;
   justify-content: flex-start;
 }
+
+.analysis-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* 콘텐츠 중앙 정렬 */
+  justify-content: center;  /* 콘텐츠 중앙 정렬 */
+  height: 80vh;  /* 전체 화면 높이를 차지하도록 설정 */
+  text-align: center;
+  position: relative;
+}
+
+.uploaded-image {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+}
+
+.analysis-container button {
+  margin-top: 10px;  /* 버튼과 문구 간의 간격 */
+  padding: 10px 20px;
+  background-color: #4CAF50;  /* 배경색을 초록으로 설정 */
+  color: #ffffff;  /* 텍스트 색상을 초록색으로 설정 */
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.analysis-container button:hover {
+  background-color: #3e9242;  /* 버튼 호버 시 초록색 배경 */
+  color: white;  /* 호버 시 텍스트 색상은 흰색으로 변경 */
+}
+
+.analysis-container p {
+  font-size: 16px;
+  color: #555;
+  font-weight: bold;
+}
