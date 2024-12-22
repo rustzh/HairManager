@@ -13,10 +13,9 @@ function MemberService() {
       const data = await response.json();
       const newBlocks = data.map((item) => ({
         id: item.id,
-        faceType: item.FaceType.typeName,
-        date: item.createdAt.split("T")[0],
-        hairStyle: item.FaceType.hairName,
-        imageUrl: item.imageUrl, // imageUrl 추가
+        faceType: item.FaceType?.typeName || "Unknown",
+        date: item.createdAt.split("T")[0] || "Unknown Date",
+        hairStyle: item.FaceType.hairName || "Unknown",
       }));
       setBlocks(newBlocks);
     } catch (error) {
