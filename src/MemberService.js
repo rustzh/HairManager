@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MemberService() {
   const [blocks, setBlocks] = useState([]);
+  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 사용
 
   useEffect(() => {
     fetchUserData();
@@ -9,16 +11,25 @@ function MemberService() {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch("/api/record/history");
+      const accessToken = sessionStorage.getItem("accessToken");
+      const response = await fetch("/api/record/history", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
       const newBlocks = data.map((item) => ({
         id: item.id,
-        faceType: item.FaceType.typeName || "Unknown",
-        date: item.createdAt.split("T")[0] || "Unknown",
-        hairStyle: item.FaceType.hairName || "Unknown",
+        date: item.createdAt?.split("T")[0] || "Unknown",
+        typeCode: item.typeCode,
+        typeName: item.FaceType?.typeName || "Unknown",
+        typeDesc: item.FaceType?.typeDesc || "Unknown",
+        hairName: item.FaceType?.hairName || "Unknown",
+        hairDesc: item.FaceType?.hairDesc || "Unknown",
+        fileName: item.imageUrl,
       }));
       setBlocks(newBlocks);
     } catch (error) {
@@ -26,9 +37,18 @@ function MemberService() {
     }
   };
 
-  // showHistory 함수 정의: 클릭된 기록을 처리하는 예시
   const showHistory = (block) => {
-    // 여기에서 block의 자세한 내용을 표시하는 로직을 추가할 수 있습니다.
+    // 분석 결과 페이지로 이동하며 선택된 block 데이터를 전달
+    navigate("/analysis-result", {
+      state: {
+        typeCode: block.typeCode,
+        typeName: block.typeName,
+        typeDesc: block.typeDesc,
+        hairName: block.hairName,
+        hairDesc: block.hairDesc,
+        fileName: block.imageUrl,
+      },
+    });
   };
 
   return (
@@ -45,9 +65,9 @@ function MemberService() {
               className="historyBlock"
               onClick={() => showHistory(block)}
             >
-              <div className="cell">{block.faceType}</div>
+              <div className="cell">{block.typeName}</div>
               <div className="cell">{block.date}</div>
-              <div className="cell">{block.hairStyle}</div>
+              <div className="cell">{block.hairName}</div>
               <img
                 src={block.imageUrl}
                 alt="Hair style"
