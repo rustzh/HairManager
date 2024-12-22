@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import SignupForm from "./components/SignupForm";
 import LoginForm from "./components/LoginForm";
@@ -95,13 +95,15 @@ function About() {
 function App() {
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext); // AuthContext에서 상태 가져오기
   const [isLoading, setIsLoading] = useState(false); // 로딩 상태
-  // eslint-disable-next-line no-unused-vars
-  const [analysisResult, setAnalysisResult] = useState(null);
   const [preview, setPreview] = useState(null); // 이미지 미리보기 URL
   const [gender, setGender] = useState(""); // 성별 선택
   const [bubbleMessage, setBubbleMessage] = useState(
     "안녕하세요! 저는 AI입니다.\n헤어스타일을 추천해드릴게요!"
   );
+
+  const navigate = useNavigate(); // useNavigate hook 사용
+  // eslint-disable-next-line no-unused-vars
+  const [analysisResult, setAnalysisResult] = useState(null); // 분석 결과 상태
 
   // 성별 변경 핸들러
   const handleGenderChange = (e) => {
@@ -154,6 +156,8 @@ function App() {
 
       if (response.status === 200) {
         setAnalysisResult(response.data); // 분석 결과 저장
+        // 분석 결과를 state로 전달하며 페이지 이동
+        navigate("/analysis-result", { state: response.data });
         alert("이미지 분석이 완료되었습니다.");
       } else {
         alert("이미지 분석에 실패했습니다.");
@@ -174,7 +178,6 @@ function App() {
   }, [setIsLoggedIn]);  
 
   return (
-    <Router>
       <div className="App">
         {/* Navbar는 항상 렌더링됩니다 */}
         <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
@@ -280,13 +283,9 @@ function App() {
           <Route path="/about" element={<About />} />
 
           {/* 분석 결과 페이지 */}
-          <Route
-            path="/analysis-result"
-            element={<AnalysisResult />} // 분석 결과 페이지 컴포넌트
-          />
+          <Route path="/analysis-result" element={<AnalysisResult analysisResult={analysisResult} />} />
         </Routes>
       </div>
-    </Router>
   );
 }
 
