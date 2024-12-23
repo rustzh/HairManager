@@ -2,10 +2,8 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AnalysisResult.css";
-import { upload } from "@testing-library/user-event/dist/upload";
 
 function AnalysisResult({ setPreview }) {
-  const hairImagePath = useState(null); // 경로로
   const navigate = useNavigate();
   const location = useLocation();
   const fromResultPage = location.state?.fromResultPage;
@@ -44,7 +42,8 @@ function AnalysisResult({ setPreview }) {
       });
 
       if (response.status === 200) {
-        alert(response.data.message); // save.js에서 받은 저장 성공 메시지 표시
+        console.log(response.data);
+        alert(response.data.result); // save.js에서 받은 저장 성공 메시지 표시
       } else {
         alert(response.data.message); // save.js에서 받은 저장 실패 메시지 표시
       }
@@ -60,6 +59,8 @@ function AnalysisResult({ setPreview }) {
     navigate("/"); // 홈으로 이동
   };
 
+  console.log(analysisResult.typeCode); // typeCode 값 확인
+
   return (
     <div className="AnalysisResult">
       <h1 className="title">분석 결과</h1>
@@ -68,7 +69,10 @@ function AnalysisResult({ setPreview }) {
           <img src={uploadedImageUrl} alt="업로드 이미지" />
         </div>
         <div className="image-box">
-          <img src={hairImagePath} alt="헤어 이미지" />
+          <img
+            src={`/hairstyles/${analysisResult.typeCode}.jpg`}
+            alt="헤어 이미지"
+          />
         </div>
       </div>
       <h2 className="subtitle">{analysisResult.hairName}</h2>

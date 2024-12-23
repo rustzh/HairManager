@@ -30,7 +30,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     imageCache.set(fileName, { filePath, timer });
 
     // 성별 코드 + 얼굴형 코드 조합으로 csv 파일에서 결과값 가져오기
-    const typeCode = (genderCode + faceShapeCode).trim(); // faceShapeCode에 개행문자가 있어서 trim()
+    const typeCode = (genderCode + faceShapeCode).trimEnd(); // faceShapeCode에 개행문자가 있어서 trim()
 
     try {
       const queryResult = await getFaceTypeByCode(typeCode);

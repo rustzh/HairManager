@@ -26,7 +26,8 @@ router.post("/", auth, async (req, res) => {
   // 결과값 저장
   try {
     // 이미지 - S3 저장
-    const imageUrl = await imageUploadToS3(userId, filePath, fileName, timer);
+    const imageUrl = `${process.env.BUCKET_URL}/${userId}/${fileName}`;
+    await imageUploadToS3(userId, filePath, fileName, timer, imageUrl);
 
     // 결과값 - DB (userId, typeCode, imageUrl)
     const historyCount = await getHistoryCountById(userId);
@@ -36,8 +37,9 @@ router.post("/", auth, async (req, res) => {
     }
     await createHistory(userId, typeCode, imageUrl);
     console.log("DB 저장 완료");
-    res.status(200).json({
-      message: "저장이 완료되었습니다.",
+    const result = "저장이 완료되었습니다.";
+    return res.status(200).json({
+      result: result,
     });
   } catch (err) {
     console.log("저장 실패", err);
