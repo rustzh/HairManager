@@ -35,12 +35,12 @@ def process(image_path):
         f = sorted_indices[0]
         s = sorted_indices[1]
 
-        face_code = f * 10
+        face_code = str(f)
 
         if predictions[f] - predictions[s] < 0.2:
-            face_code += f
+            face_code += str(f)
         else:
-            face_code += s
+            face_code += str(s)
 
         return face_code
     except Exception as e:
