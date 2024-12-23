@@ -181,7 +181,9 @@ function App() {
       if (response.status === 200) {
         setAnalysisResult(response.data); // 분석 결과 저장
         setIsAnalysisComplete(true); // 분석 완료 상태 변경
-        navigate("/analysis-result", { state: response.data }); // 분석 결과를 전달
+        navigate("/analysis-result", {
+          state: { data: response.data, uploadedImage: fileBlob },
+        }); // 분석 결과를 전달
       } else {
         alert("이미지 분석에 실패했습니다.");
       }
