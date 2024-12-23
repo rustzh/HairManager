@@ -67,7 +67,9 @@ function AnalysisResult({ setPreview }) {
         <div className="image-box">
           <img src={uploadedImageUrl} alt="업로드 이미지" />
         </div>
-        <div className="image-box">헤어 이미지</div>
+        <div className="image-box">
+          <img src="/hairstyles/${analysisResult.typeCode}.jpg" alt="헤어 이미지" />
+        </div>
       </div>
       <h2 className="subtitle">{analysisResult.hairName}</h2>
       <div className="recommendation-list">
