@@ -68,11 +68,6 @@ function MemberService() {
               <div className="cell">{block.typeName}</div>
               <div className="cell">{block.date}</div>
               <div className="cell">{block.hairName}</div>
-              <img
-                src={block.imageUrl}
-                alt="Hair style"
-                style={{ maxWidth: "100%" }}
-              />
             </div>
           ))
         ) : (
