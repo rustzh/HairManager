@@ -24,12 +24,10 @@ function MemberService() {
       const newBlocks = data.map((item) => ({
         id: item.id,
         date: item.createdAt?.split("T")[0] || "Unknown",
-        typeCode: item.typeCode,
         typeName: item.FaceType?.typeName || "Unknown",
-        typeDesc: item.FaceType?.typeDesc || "Unknown",
         hairName: item.FaceType?.hairName || "Unknown",
-        hairDesc: item.FaceType?.hairDesc || "Unknown",
-        fileName: item.imageUrl,
+        imageUrl: item.imageUrl,
+        data: item.FaceType
       }));
       setBlocks(newBlocks);
     } catch (error) {
@@ -38,15 +36,11 @@ function MemberService() {
   };
 
   const showHistory = (block) => {
-    // 분석 결과 페이지로 이동하며 선택된 block 데이터를 전달
     navigate("/analysis-result", {
       state: {
-        typeCode: block.typeCode,
-        typeName: block.typeName,
-        typeDesc: block.typeDesc,
-        hairName: block.hairName,
-        hairDesc: block.hairDesc,
-        fileName: block.imageUrl,
+        fromResultPage: false,
+        data: block.data,
+        uploadedImageUrl: block.imageUrl,
       },
     });
   };
