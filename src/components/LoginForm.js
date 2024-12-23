@@ -17,10 +17,13 @@ function LoginForm() {
 
     try {
       // 서버로 로그인 요청
-      const response = await axios.post("/api/users/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/users/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       // 로그인 성공 시 사용자 이름과 토큰을 sessionStorage에 저장
       const { accessToken, username } = response.data;
@@ -34,7 +37,6 @@ function LoginForm() {
       // 리디렉션 후 페이지 새로 고침
       navigate("/"); // 홈으로 리디렉션
       window.location.reload(); // 페이지 새로 고침
-      
     } catch (error) {
       console.error("로그인 실패:", error.response || error);
       setError(

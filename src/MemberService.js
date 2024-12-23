@@ -1,4 +1,4 @@
- import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MemberService() {
@@ -12,11 +12,14 @@ function MemberService() {
   const fetchUserData = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch("/api/record/history", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/record/history`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -25,7 +28,7 @@ function MemberService() {
         id: item.id,
         date: item.createdAt?.split("T")[0] || "Unknown",
         imageUrl: item.imageUrl,
-        data: item.FaceType
+        data: item.FaceType,
       }));
       setBlocks(newBlocks);
     } catch (error) {
@@ -46,7 +49,10 @@ function MemberService() {
   return (
     <div className="MemberService">
       <h1>기록 저장소</h1>
-      <p>기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수 있습니다.</p>
+      <p>
+        기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수
+        있습니다.
+      </p>
       <div className="HistoryContainer">
         {blocks.length > 0 ? (
           blocks.map((block) => (

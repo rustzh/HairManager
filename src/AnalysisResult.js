@@ -35,11 +35,15 @@ function AnalysisResult({ setPreview }) {
     try {
       const accessToken = sessionStorage.getItem("accessToken");
 
-      const response = await axios.post("/api/record/save", dataToSave, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/record/save`,
+        dataToSave,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       if (response.status === 200) {
         console.log(response.data);

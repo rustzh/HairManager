@@ -4,7 +4,7 @@ import axios from "axios";
 import "./Navbar.css";
 
 function Navbar({ setPreview }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);  // 초기 상태를 null로 설정
+  const [isLoggedIn, setIsLoggedIn] = useState(null); // 초기 상태를 null로 설정
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ function Navbar({ setPreview }) {
     // 토큰이 존재하면 사용자 정보를 가져오기
     if (accessToken) {
       axios
-        .get("/api/users/auth", {
+        .get(`${process.env.REACT_APP_API_URL}/api/users/auth`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -30,11 +30,11 @@ function Navbar({ setPreview }) {
     } else {
       setIsLoggedIn(false);
     }
-  }, []);  // 빈 배열을 넣어 컴포넌트가 처음 렌더링될 때만 실행
+  }, []); // 빈 배열을 넣어 컴포넌트가 처음 렌더링될 때만 실행
 
   // isLoggedIn이 아직 null일 경우 로딩 상태를 표시
   if (isLoggedIn === null) {
-    return <div className="loading-message">새로고침 중...</div>;  // 새로고침 중 표시
+    return <div className="loading-message">새로고침 중...</div>; // 새로고침 중 표시
   }
 
   const handleLogout = async () => {

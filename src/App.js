@@ -22,11 +22,14 @@ function MemberService() {
   const fetchUserData = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch("/api/record/history", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/record/history`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -169,9 +172,13 @@ function App() {
     formData.append("file", fileBlob, "uploaded-image.jpg");
 
     try {
-      const response = await axios.post("/api/record/run", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/record/run`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       if (response.status === 200) {
         setAnalysisResult(response.data); // 분석 결과 저장

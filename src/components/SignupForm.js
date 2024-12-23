@@ -23,11 +23,14 @@ function SignupForm() {
 
     try {
       // 서버로 회원가입 요청 보내기
-      const response = await axios.post("/api/users/register", {
-        email,
-        username, // 이름을 전송
-        password,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/users/register`,
+        {
+          email,
+          username, // 이름을 전송
+          password,
+        }
+      );
 
       alert(response.data.message); // 성공 메시지 출력
       navigate("/login");
