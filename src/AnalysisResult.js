@@ -5,7 +5,7 @@ import "./AnalysisResult.css";
 import { upload } from "@testing-library/user-event/dist/upload";
 
 function AnalysisResult({ setPreview }) {
-  // const [hairImage, setHairImage] = useState(null);
+  const hairImagePath = useState(null); // 경로로
   const navigate = useNavigate();
   const location = useLocation();
   const fromResultPage = location.state?.fromResultPage;
@@ -67,7 +67,9 @@ function AnalysisResult({ setPreview }) {
         <div className="image-box">
           <img src={uploadedImageUrl} alt="업로드 이미지" />
         </div>
-        <div className="image-box">헤어 이미지</div>
+        <div className="image-box">
+          <img src={hairImagePath} alt="헤어 이미지" />
+        </div>
       </div>
       <h2 className="subtitle">{analysisResult.hairName}</h2>
       <div className="recommendation-list">
