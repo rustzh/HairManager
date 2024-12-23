@@ -246,75 +246,63 @@ button:hover {
   background-color: #0056b3;
 }
 
+/* 이 아래부터 MemberService 컴포넌트들입니다 */
+
 .MemberService {
-  padding: 20px;
-  border: 3px solid #ddd;
-  background-color: #f8f8f8;
-  margin: auto;
-  max-width: 700px;
-  text-align: center;
+    padding: 20px;
+    border: 3px solid #ddd;
+    background-color: #f8f8f8;
+    margin: auto;
+    max-width: 700px;
+    text-align: center;
+    font-family: "Arial, sans-serif";
 }
 
 .MemberService h1 {
-  margin-bottom: 10px;
-  color: #333;
-  font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 24px;
+    font-family: "Georgia, serif";
 }
 
 .MemberService p {
-  margin-bottom: 20px;
-  color: #666;
-  font-size: 16px;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 16px;
+    font-family: "Arial, sans-serif";
 }
 
 .HistoryContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    font-family: "Verdana, sans-serif";
 }
 
 .historyBlock {
-  width: 300px;
-  padding: 10px;
-  background-color: white;
-  border: 1px solid #aaa;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 10px;
-  cursor: pointer;
+    width: 300px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #aaa;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    cursor: pointer;
+    font-family: "Verdana, sans-serif";
 }
 
-.cell {
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  justify-content: center;
+.date {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  align-self: start;
 }
 
-.cell:nth-child(1) {
-  /* Top left */
-  grid-column: 1 / 2;
-  grid-row: 1 / 2;
-  justify-content: flex-start;
-}
-
-.cell:nth-child(2) {
-  /* Top right */
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
-  justify-content: flex-end;
-}
-
-.cell:nth-child(3) {
-  /* Bottom left */
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  justify-content: flex-start;
-}
+/* 이 위까지 MemberService 컴포넌트들입니다. */
 
 .analysis-container {
   display: flex;
