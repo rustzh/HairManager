@@ -6,12 +6,19 @@ import { upload } from "@testing-library/user-event/dist/upload";
 
 function AnalysisResult({ setPreview }) {
   // const [hairImage, setHairImage] = useState(null);
-  const location = useLocation();
-  const analysisResult = location.state.data;
-  const uploadedImage = location.state?.uploadedImage;
-  const uploadedImageUrl = URL.createObjectURL(uploadedImage);
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const fromResultPage = location.state?.fromResultPage;
+  const analysisResult = location.state.data;
+  let uploadedImage, uploadedImageUrl;
+  if (fromResultPage) {
+    // 결과 조회 화면에서 넘어온 경우
+    uploadedImage = location.state?.uploadedImage;
+    uploadedImageUrl = URL.createObjectURL(uploadedImage);
+  } else {
+    // 기록 저장소에서 넘어온 경우
+    uploadedImageUrl = location.state?.uploadedImageUrl;
+  }
   const isLoggedIn = sessionStorage.getItem("accessToken");
 
   // 저장 버튼 클릭 핸들러
@@ -72,7 +79,7 @@ function AnalysisResult({ setPreview }) {
         <button style={styles.button} onClick={handleHomeClick}>
           홈으로
         </button>
-        {isLoggedIn && (
+        {isLoggedIn && fromResultPage && (
           <button style={styles.button} onClick={handleSave}>
             저장
           </button>

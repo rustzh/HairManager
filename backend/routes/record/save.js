@@ -37,7 +37,7 @@ router.post("/", auth, async (req, res) => {
     await createHistory(userId, typeCode, imageUrl);
     console.log("DB 저장 완료");
     res.status(200).json({
-      imageUrl: imageUrl,
+      message: "저장이 완료되었습니다.",
     });
   } catch (err) {
     console.log("저장 실패", err);
