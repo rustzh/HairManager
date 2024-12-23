@@ -295,30 +295,11 @@ button:hover {
     font-family: "Verdana, sans-serif";
 }
 
-.cell {
-    display: flex;
-    align-items: center;
-    padding: 5px;
-    justify-content: center;
-    font-family: "Tahoma, sans-serif";
-}
-
-.cell:nth-child(1) { /* Top left */
-    grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    justify-content: flex-start;
-}
-
-.cell:nth-child(2) { /* Top right */
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    justify-content: flex-end;
-}
-
-.cell:nth-child(3) { /* Bottom left */
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-    justify-content: flex-start;
+.date {
+  font-size: 12px;
+  color: #555;
+  text-align: right;
+  align-self: start;
 }
 
 /* 이 위까지 MemberService 컴포넌트들입니다. */

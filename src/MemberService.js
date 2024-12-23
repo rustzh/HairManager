@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MemberService() {
   const [blocks, setBlocks] = useState([]);
-  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 사용
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUserData();
@@ -24,8 +24,6 @@ function MemberService() {
       const newBlocks = data.map((item) => ({
         id: item.id,
         date: item.createdAt?.split("T")[0] || "Unknown",
-        typeName: item.FaceType?.typeName || "Unknown",
-        hairName: item.FaceType?.hairName || "Unknown",
         imageUrl: item.imageUrl,
         data: item.FaceType
       }));
@@ -48,9 +46,7 @@ function MemberService() {
   return (
     <div className="MemberService">
       <h1>기록 저장소</h1>
-      <p>
-        기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수 있습니다.
-      </p>
+      <p>기록 저장소입니다. 원하는 블록을 눌러 저장된 기록을 확인하실 수 있습니다.</p>
       <div className="HistoryContainer">
         {blocks.length > 0 ? (
           blocks.map((block) => (
@@ -59,9 +55,12 @@ function MemberService() {
               className="historyBlock"
               onClick={() => showHistory(block)}
             >
-              <div className="cell">{block.typeName}</div>
-              <div className="cell">{block.date}</div>
-              <div className="cell">{block.hairName}</div>
+              <img
+                src={block.imageUrl}
+                alt="Hair style"
+                style={{ maxWidth: "100%", borderRadius: "5px" }}
+              />
+              <div className="date">{block.date}</div>
             </div>
           ))
         ) : (
