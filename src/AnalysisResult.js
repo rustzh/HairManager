@@ -2,10 +2,14 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AnalysisResult.css";
+import { upload } from "@testing-library/user-event/dist/upload";
 
 function AnalysisResult({ setPreview }) {
+  // const [hairImage, setHairImage] = useState(null);
   const location = useLocation();
-  const analysisResult = location.state;
+  const analysisResult = location.state.data;
+  const uploadedImage = location.state?.uploadedImage;
+  const uploadedImageUrl = URL.createObjectURL(uploadedImage);
   const navigate = useNavigate();
 
   const isLoggedIn = sessionStorage.getItem("accessToken");
@@ -53,7 +57,9 @@ function AnalysisResult({ setPreview }) {
     <div className="AnalysisResult">
       <h1 className="title">분석 결과</h1>
       <div className="image-section">
-        <div className="image-box">업로드 이미지</div>
+        <div className="image-box">
+          <img src={uploadedImageUrl} alt="업로드 이미지" />
+        </div>
         <div className="image-box">헤어 이미지</div>
       </div>
       <h2 className="subtitle">{analysisResult.hairName}</h2>
