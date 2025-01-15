@@ -22,18 +22,18 @@ function MemberService() {
   const fetchUserData = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch(
+
+      const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/record/history`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          withCredentials: true,
         }
       );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+
+      const data = response.data;
       const newBlocks = data.map((item) => ({
         id: item.id,
         date: item.createdAt?.split("T")[0] || "Unknown",

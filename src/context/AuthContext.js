@@ -12,7 +12,7 @@ const AuthProvider = ({ children }) => {
 
     if (accessToken) {
       axios
-        .get(`${process.env.REACT_APP_API_URL}/api/users/auth`, {
+        .get(`${process.env.REACT_APP_API_URL}/api/record/auth`, {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },

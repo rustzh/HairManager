@@ -12,14 +12,17 @@ function MemberService() {
   const fetchUserData = async () => {
     try {
       const accessToken = sessionStorage.getItem("accessToken");
-      const response = await fetch(
+
+      const response = await axios.get(
         `${process.env.REACT_APP_API_URL}/api/record/history`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
+          withCredentials: true,
         }
       );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

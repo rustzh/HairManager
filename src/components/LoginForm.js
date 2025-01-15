@@ -22,6 +22,9 @@ function LoginForm() {
         {
           email,
           password,
+        },
+        {
+          withCredentials: true,
         }
       );
 

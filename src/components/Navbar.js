@@ -16,8 +16,9 @@ function Navbar({ setPreview }) {
       axios
         .get(`${process.env.REACT_APP_API_URL}/api/users/auth`, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`, // 액세스 토큰을 Authorization 헤더로 전달
           },
+          withCredentials: true, // 쿠키를 포함한 요청을 서버에 전달
         })
         .then((response) => {
           setIsLoggedIn(true);
