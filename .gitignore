@@ -1,15 +1,26 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.js
 
+backend/.env
+backend/keras_model/first_model.keras
+backend/uploads/temp/
+
+# Testing
+coverage/
+
+# Production
+build/
+
+# Misc
+.DS_Store
+.env
+
 # testing
-/coverage
+coverage/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
